@@ -1,0 +1,2399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matriz de Avaliação Técnica</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --border: #1e1e2e;
+    --text: #e2e2f0;
+    --muted: #6b6b8a;
+    --accent: #f5c842;
+    --green: #4ade80;
+    --blue: #60a5fa;
+    --purple: #a78bfa;
+    --red: #f87171;
+    --orange: #fb923c;
+
+    --lvl1: #ef4444;
+    --lvl2: #f97316;
+    --lvl3: #eab308;
+    --lvl4: #22c55e;
+    --lvl5: #6366f1;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  header {
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 200px;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .header-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+
+  h1 span {
+    color: var(--accent);
+  }
+
+  .subtitle {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+  /* LEVEL LEGEND */
+  .legend {
+    display: flex;
+    gap: 12px;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    background: var(--surface);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .legend-item:hover, .legend-item.active {
+    background: var(--border);
+    border-color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  /* MAIN LAYOUT */
+  .main {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: calc(100vh - 180px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 180px);
+    overflow-y: auto;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .sidebar-section {
+    padding: 8px 20px;
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 16px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--muted);
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    font-weight: 600;
+  }
+
+  .nav-item:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .nav-item.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: rgba(245, 200, 66, 0.05);
+  }
+
+  .nav-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    min-width: 20px;
+  }
+
+  /* CONTENT AREA */
+  .content {
+    padding: 40px;
+    overflow-y: auto;
+  }
+
+  .competency-panel {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .competency-panel.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .panel-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 48px;
+    font-weight: 600;
+    color: var(--border);
+    line-height: 1;
+    min-width: 70px;
+  }
+
+  .panel-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .panel-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    background: var(--border);
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* LEVELS */
+  .levels-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .level-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .level-card:hover {
+    border-color: var(--muted);
+  }
+
+  .level-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    background: var(--surface);
+    user-select: none;
+  }
+
+  .level-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    min-width: 100px;
+    text-align: center;
+  }
+
+  .l1 { background: rgba(239,68,68,0.15); color: var(--lvl1); border: 1px solid rgba(239,68,68,0.3); }
+  .l2 { background: rgba(249,115,22,0.15); color: var(--lvl2); border: 1px solid rgba(249,115,22,0.3); }
+  .l3 { background: rgba(234,179,8,0.15); color: var(--lvl3); border: 1px solid rgba(234,179,8,0.3); }
+  .l4 { background: rgba(34,197,94,0.15); color: var(--lvl4); border: 1px solid rgba(34,197,94,0.3); }
+  .l5 { background: rgba(99,102,241,0.15); color: var(--lvl5); border: 1px solid rgba(99,102,241,0.3); }
+
+  .level-desc {
+    font-size: 14px;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .level-chevron {
+    color: var(--muted);
+    font-size: 12px;
+    transition: transform 0.2s;
+  }
+
+  .level-card.open .level-chevron {
+    transform: rotate(180deg);
+  }
+
+  .level-body {
+    display: none;
+    padding: 0 20px 20px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+
+  .level-card.open .level-body {
+    display: block;
+  }
+
+  .example-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 20px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .example-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .code-block {
+    border-radius: 6px;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  .code-block pre {
+    margin: 0 !important;
+    padding: 16px !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    overflow-x: auto;
+  }
+
+  .code-lang {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .observation {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-left: 3px solid var(--accent);
+    background: rgba(245,200,66,0.05);
+    font-size: 13px;
+    color: var(--muted);
+    border-radius: 0 4px 4px 0;
+    line-height: 1.6;
+  }
+
+  .observation strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* OVERVIEW MODE */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    padding: 40px;
+  }
+
+  .overview-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .overview-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+    transform-origin: left;
+  }
+
+  .overview-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .overview-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .ov-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .ov-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .ov-levels {
+    display: flex;
+    gap: 4px;
+  }
+
+  .ov-dot {
+    width: 28px;
+    height: 4px;
+    border-radius: 2px;
+  }
+
+  #overview-panel { display: block; }
+  #overview-panel.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">// avaliação técnica</div>
+  <h1>Matriz de <span>Competências</span><br>com Exemplos Reais</h1>
+  <p class="subtitle">Clique em uma competência para ver exemplos de código por nível</p>
+</header>
+
+<div class="legend">
+  <div class="legend-item" onclick="filterLevel(1, this)"><div class="legend-dot" style="background:var(--lvl1)"></div> Iniciante</div>
+  <div class="legend-item" onclick="filterLevel(2, this)"><div class="legend-dot" style="background:var(--lvl2)"></div> Básico</div>
+  <div class="legend-item" onclick="filterLevel(3, this)"><div class="legend-dot" style="background:var(--lvl3)"></div> Intermediário</div>
+  <div class="legend-item" onclick="filterLevel(4, this)"><div class="legend-dot" style="background:var(--lvl4)"></div> Avançado</div>
+  <div class="legend-item" onclick="filterLevel(5, this)"><div class="legend-dot" style="background:var(--lvl5)"></div> Especialista</div>
+</div>
+
+<div class="main">
+  <nav class="sidebar">
+    <div class="sidebar-section">Visão Geral</div>
+    <div class="nav-item active" onclick="showOverview(this)">
+      <span class="nav-num">⊞</span> Todas as competências
+    </div>
+
+    <div class="sidebar-section">Fundamentos</div>
+    <div class="nav-item" onclick="showPanel('p1', this)"><span class="nav-num">01</span> Algoritmos e Lógica</div>
+    <div class="nav-item" onclick="showPanel('p2', this)"><span class="nav-num">02</span> Estrutura de Dados</div>
+    <div class="nav-item" onclick="showPanel('p3', this)"><span class="nav-num">03</span> OOP / Modelagem</div>
+
+    <div class="sidebar-section">Backend</div>
+    <div class="nav-item" onclick="showPanel('p4', this)"><span class="nav-num">04</span> C# / .NET</div>
+    <div class="nav-item" onclick="showPanel('p5', this)"><span class="nav-num">05</span> Banco de Dados</div>
+    <div class="nav-item" onclick="showPanel('p6', this)"><span class="nav-num">06</span> Engenharia de Software</div>
+    <div class="nav-item" onclick="showPanel('p7', this)"><span class="nav-num">07</span> Testes Automatizados</div>
+    <div class="nav-item" onclick="showPanel('p8', this)"><span class="nav-num">08</span> APIs e Integrações</div>
+
+    <div class="sidebar-section">Arquitetura</div>
+    <div class="nav-item" onclick="showPanel('p16', this)"><span class="nav-num">16</span> Arquitetura de Software</div>
+    <div class="nav-item" onclick="showPanel('p13', this)"><span class="nav-num">13</span> Performance</div>
+    <div class="nav-item" onclick="showPanel('p15', this)"><span class="nav-num">15</span> Segurança</div>
+
+    <div class="sidebar-section">Frontend & Ops</div>
+    <div class="nav-item" onclick="showPanel('p9', this)"><span class="nav-num">09</span> Desenvolvimento Web</div>
+    <div class="nav-item" onclick="showPanel('p11', this)"><span class="nav-num">11</span> DevOps / CI-CD</div>
+    <div class="nav-item" onclick="showPanel('p14', this)"><span class="nav-num">14</span> Observabilidade</div>
+    <div class="nav-item" onclick="showPanel('p17', this)"><span class="nav-num">17</span> Qualidade e Code Review</div>
+  </nav>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div id="overview-panel">
+      <div style="margin-bottom:24px">
+        <p style="color:var(--muted); font-size:14px; line-height:1.7">
+          Esta matriz cobre <strong style="color:var(--text)">17 competências técnicas</strong> com exemplos reais de código para cada nível de proficiência.
+          Selecione uma competência no menu lateral ou nos cards abaixo.
+        </p>
+      </div>
+      <div class="overview-grid" style="padding:0; margin:0">
+        <div class="overview-card" onclick="showPanel('p1', null)">
+          <div class="ov-num">01</div>
+          <div class="ov-title">Algoritmos e Lógica</div>
+          <div class="ov-levels">
+            <div class="ov-dot" style="background:var(--lvl1)"></div>
+            <div class="ov-dot" style="background:var(--lvl2)"></div>
+            <div class="ov-dot" style="background:var(--lvl3)"></div>
+            <div class="ov-dot" style="background:var(--lvl4)"></div>
+            <div class="ov-dot" style="background:var(--lvl5)"></div>
+          </div>
+        </div>
+        <div class="overview-card" onclick="showPanel('p2', null)">
+          <div class="ov-num">02</div>
+          <div class="ov-title">Estrutura de Dados</div>
+          <div class="ov-levels">
+            <div class="ov-dot" style="background:var(--lvl1)"></div>
+            <div class="ov-dot" style="background:var(--lvl2)"></div>
+            <div class="ov-dot" style="background:var(--lvl3)"></div>
+            <div class="ov-dot" style="background:var(--lvl4)"></div>
+            <div class="ov-dot" style="background:var(--lvl5)"></div>
+          </div>
+        </div>
+        <div class="overview-card" onclick="showPanel('p3', null)">
+          <div class="ov-num">03</div>
+          <div class="ov-title">OOP / Modelagem</div>
+          <div class="ov-levels">
+            <div class="ov-dot" style="background:var(--lvl1)"></div>
+            <div class="ov-dot" style="background:var(--lvl2)"></div>
+            <div class="ov-dot" style="background:var(--lvl3)"></div>
+            <div class="ov-dot" style="background:var(--lvl4)"></div>
+            <div class="ov-dot" style="background:var(--lvl5)"></div>
+          </div>
+        </div>
+        <div class="overview-card" onclick="showPanel('p4', null)">
+          <div class="ov-num">04</div>
+          <div class="ov-title">C# / .NET</div>
+          <div class="ov-levels">
+            <div class="ov-dot" style="background:var(--lvl1)"></div>
+            <div class="ov-dot" style="background:var(--lvl2)"></div>
+            <div class="ov-dot" style="background:var(--lvl3)"></div>
+            <div class="ov-dot" style="background:var(--lvl4)"></div>
+            <div class="ov-dot" style="background:var(--lvl5)"></div>
+          </div>
+        </div>
+        <div class="overview-card" onclick="showPanel('p5', null)">
+          <div class="ov-num">05</div>
+          <div class="ov-title">Banco de Dados</div>
+          <div class="ov-levels">
+            <div class="ov-dot" style="background:var(--lvl1)"></div>
+            <div class="ov-dot" style="background:var(--lvl2)"></div>
+            <div class="ov-dot" style="background:var(--lvl3)"></div>
+            <div class="ov-dot" style="background:var(--lvl4)"></div>
+            <div class="ov-dot" style="background:var(--lvl5)"></div>
+          </div>
+        </div>
+        <div class="overview-card" onclick="showPanel('p6', null)">
+          <div class="ov-num">06</div>
+          <div class="ov-title">Engenharia de Software</div>
+          <div class="ov-levels">
+            <div class="ov-dot" style="background:var(--lvl1)"></div>
+            <div class="ov-dot" style="background:var(--lvl2)"></div>
+            <div class="ov-dot" style="background:var(--lvl3)"></div>
+            <div class="ov-dot" style="background:var(--lvl4)"></div>
+            <div class="ov-dot" style="background:var(--lvl5)"></div>
+          </div>
+        </div>
+        <div class="overview-card" onclick="showPanel('p7', null)">
+          <div class="ov-num">07</div>
+          <div class="ov-title">Testes Automatizados</div>
+          <div class="ov-levels">
+            <div class="ov-dot" style="background:var(--lvl1)"></div>
+            <div class="ov-dot" style="background:var(--lvl2)"></div>
+            <div class="ov-dot" style="background:var(--lvl3)"></div>
+            <div class="ov-dot" style="background:var(--lvl4)"></div>
+            <div class="ov-dot" style="background:var(--lvl5)"></div>
+          </div>
+        </div>
+        <div class="overview-card" onclick="showPanel('p8', null)">
+          <div class="ov-num">08</div>
+          <div class="ov-title">APIs e Integrações</div>
+          <div class="ov-levels">
+            <div class="ov-dot" style="background:var(--lvl1)"></div>
+            <div class="ov-dot" style="background:var(--lvl2)"></div>
+            <div class="ov-dot" style="background:var(--lvl3)"></div>
+            <div class="ov-dot" style="background:var(--lvl4)"></div>
+            <div class="ov-dot" style="background:var(--lvl5)"></div>
+          </div>
+        </div>
+        <div class="overview-card" onclick="showPanel('p16', null)">
+          <div class="ov-num">16</div>
+          <div class="ov-title">Arquitetura de Software</div>
+          <div class="ov-levels">
+            <div class="ov-dot" style="background:var(--lvl1)"></div>
+            <div class="ov-dot" style="background:var(--lvl2)"></div>
+            <div class="ov-dot" style="background:var(--lvl3)"></div>
+            <div class="ov-dot" style="background:var(--lvl4)"></div>
+            <div class="ov-dot" style="background:var(--lvl5)"></div>
+          </div>
+        </div>
+        <div class="overview-card" onclick="showPanel('p13', null)">
+          <div class="ov-num">13</div>
+          <div class="ov-title">Performance</div>
+          <div class="ov-levels">
+            <div class="ov-dot" style="background:var(--lvl1)"></div>
+            <div class="ov-dot" style="background:var(--lvl2)"></div>
+            <div class="ov-dot" style="background:var(--lvl3)"></div>
+            <div class="ov-dot" style="background:var(--lvl4)"></div>
+            <div class="ov-dot" style="background:var(--lvl5)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 1: Algoritmos -->
+    <div class="competency-panel" id="p1">
+      <div class="panel-header">
+        <div class="panel-num">01</div>
+        <div>
+          <div class="panel-title">Algoritmos e Lógica</div>
+          <div class="panel-tags">
+            <span class="tag">loops</span>
+            <span class="tag">recursão</span>
+            <span class="tag">complexidade</span>
+            <span class="tag">otimização</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l1">Iniciante</span>
+            <span class="level-desc">Implementa lógica simples, sem se preocupar com eficiência</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block">
+              <div class="code-lang">C#</div>
+              <pre><code class="language-csharp">// Verificar se número é primo — abordagem ingênua
+public bool IsPrimo(int n)
+{
+    for (int i = 2; i < n; i++)
+    {
+        if (n % i == 0) return false;
+    }
+    return true;
+}
+// Problema: O(n) — testa todos os divisores até n</code></pre>
+            </div>
+            <div class="observation">
+              <strong>Sinal de alerta:</strong> Não conhece que basta testar até √n. Loops desnecessários em toda a base.
+            </div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l2">Básico</span>
+            <span class="level-desc">Resolve problemas conhecidos, começa a pensar em casos extremos</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block">
+              <div class="code-lang">C#</div>
+              <pre><code class="language-csharp">// Mesmo problema, mais consciente dos casos base
+public bool IsPrimo(int n)
+{
+    if (n < 2) return false;
+    if (n == 2) return true;
+    if (n % 2 == 0) return false;
+
+    for (int i = 3; i < n; i += 2)
+    {
+        if (n % i == 0) return false;
+    }
+    return true;
+}
+// Melhora: pula pares. Mas ainda não chegou em √n</code></pre>
+            </div>
+            <div class="observation">
+              <strong>Positivo:</strong> Percebe casos extremos (n &lt; 2, par). Ainda falta conhecimento de complexidade formal.
+            </div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l3">Intermediário</span>
+            <span class="level-desc">Conhece complexidade e aplica soluções eficientes</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block">
+              <div class="code-lang">C#</div>
+              <pre><code class="language-csharp">// O(√n) — testando apenas até a raiz quadrada
+public bool IsPrimo(int n)
+{
+    if (n < 2) return false;
+    if (n == 2) return true;
+    if (n % 2 == 0) return false;
+
+    int limite = (int)Math.Sqrt(n);
+    for (int i = 3; i <= limite; i += 2)
+    {
+        if (n % i == 0) return false;
+    }
+    return true;
+}
+// Consegue explicar POR QUÊ isso funciona</code></pre>
+            </div>
+            <div class="observation">
+              <strong>Marco:</strong> Consegue explicar a prova matemática — se n tem um divisor maior que √n, o outro é menor, e já teria sido encontrado.
+            </div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l4">Avançado</span>
+            <span class="level-desc">Analisa trade-offs e escolhe algoritmo certo para o contexto</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block">
+              <div class="code-lang">C#</div>
+              <pre><code class="language-csharp">// Crivo de Eratóstenes — O(n log log n) para múltiplos números
+public bool[] GerarPrimos(int limite)
+{
+    var ehPrimo = new bool[limite + 1];
+    Array.Fill(ehPrimo, true);
+    ehPrimo[0] = ehPrimo[1] = false;
+
+    for (int i = 2; i * i <= limite; i++)
+    {
+        if (ehPrimo[i])
+        {
+            for (int j = i * i; j <= limite; j += i)
+                ehPrimo[j] = false;
+        }
+    }
+    return ehPrimo;
+}
+// Escolhe Crivo quando precisa de MÚLTIPLAS consultas</code></pre>
+            </div>
+            <div class="observation">
+              <strong>Diferencial:</strong> Sabe que a resposta muda conforme o problema. "Preciso checar uma vez ou mil vezes?" muda o algoritmo ideal.
+            </div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l5">Especialista</span>
+            <span class="level-desc">Resolve problemas com restrições severas, define abordagem para o time</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block">
+              <div class="code-lang">C#</div>
+              <pre><code class="language-csharp">// Miller-Rabin — teste probabilístico, para números enormes
+public static bool IsProbablyPrime(long n, int rounds = 10)
+{
+    if (n < 2) return false;
+    if (n == 2 || n == 3) return true;
+    if (n % 2 == 0) return false;
+
+    long d = n - 1;
+    int r = 0;
+    while (d % 2 == 0) { d /= 2; r++; }
+
+    var rng = new Random();
+    for (int i = 0; i < rounds; i++)
+    {
+        long a = 2 + (long)(rng.NextDouble() * (n - 4));
+        long x = ModPow(a, d, n);
+        if (x == 1 || x == n - 1) continue;
+
+        bool composto = true;
+        for (int j = 0; j < r - 1; j++)
+        {
+            x = ModMul(x, x, n);
+            if (x == n - 1) { composto = false; break; }
+        }
+        if (composto) return false;
+    }
+    return true; // provavelmente primo
+}
+// Discute probabilidade de erro, quando usar determinístico vs probabilístico</code></pre>
+            </div>
+            <div class="observation">
+              <strong>Especialista:</strong> Conhece as fronteiras do problema. Sabe quando usar determinístico (Miller-Rabin com bases fixas para n &lt; 3.2×10¹⁸) e explica o trade-off com RSA.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 2: Estrutura de Dados -->
+    <div class="competency-panel" id="p2">
+      <div class="panel-header">
+        <div class="panel-num">02</div>
+        <div>
+          <div class="panel-title">Estrutura de Dados</div>
+          <div class="panel-tags">
+            <span class="tag">List</span><span class="tag">Dictionary</span>
+            <span class="tag">Queue</span><span class="tag">HashSet</span><span class="tag">memória</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l1">Iniciante</span>
+            <span class="level-desc">Usa List para tudo, sem conhecer outras estruturas</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Verificar duplicatas com List — O(n²)
+var usuarios = new List&lt;string&gt; { "ana", "bob", "ana", "carlos" };
+var duplicatas = new List&lt;string&gt;();
+
+for (int i = 0; i < usuarios.Count; i++)
+{
+    for (int j = i + 1; j < usuarios.Count; j++)
+    {
+        if (usuarios[i] == usuarios[j] && !duplicatas.Contains(usuarios[i]))
+            duplicatas.Add(usuarios[i]);
+    }
+}
+// Usa lista quando deveria usar Set</code></pre></div>
+            <div class="observation"><strong>Problema:</strong> O(n²) desnecessário. Não conhece HashSet, que resolveria em O(n).</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l3">Intermediário</span>
+            <span class="level-desc">Escolhe a estrutura certa para o problema</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// HashSet para unicidade — O(n)
+var vistos = new HashSet&lt;string&gt;();
+var duplicatas = new HashSet&lt;string&gt;();
+
+foreach (var usuario in usuarios)
+{
+    if (!vistos.Add(usuario))
+        duplicatas.Add(usuario);
+}
+
+// Dictionary para contar frequência — O(n)
+var frequencia = new Dictionary&lt;string, int&gt;();
+foreach (var u in usuarios)
+{
+    frequencia.TryGetValue(u, out int count);
+    frequencia[u] = count + 1;
+    // ou: frequencia[u] = frequencia.GetValueOrDefault(u) + 1;
+}
+// Conhece quando usar cada estrutura</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> Raciocina sobre complexidade antes de escolher. HashSet para presença, Dictionary para frequência, Queue para fila, Stack para pilha.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l5">Especialista</span>
+            <span class="level-desc">Implementa estruturas customizadas e analisa memória</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// LRU Cache — estrutura composta (Dictionary + LinkedList)
+public class LruCache&lt;TKey, TValue&gt;
+{
+    private readonly int _capacity;
+    private readonly Dictionary&lt;TKey, LinkedListNode&lt;(TKey, TValue)&gt;&gt; _map;
+    private readonly LinkedList&lt;(TKey Key, TValue Value)&gt; _list;
+
+    public LruCache(int capacity)
+    {
+        _capacity = capacity;
+        _map = new Dictionary&lt;TKey, LinkedListNode&lt;(TKey, TValue)&gt;&gt;(capacity);
+        _list = new LinkedList&lt;(TKey, TValue)&gt;();
+    }
+
+    public TValue Get(TKey key)
+    {
+        if (!_map.TryGetValue(key, out var node)) return default;
+        _list.Remove(node);
+        _list.AddFirst(node);
+        return node.Value.Value;
+    }
+
+    public void Put(TKey key, TValue value)
+    {
+        if (_map.TryGetValue(key, out var node))
+        {
+            _list.Remove(node);
+            _map.Remove(key);
+        }
+        else if (_map.Count >= _capacity)
+        {
+            var last = _list.Last;
+            _map.Remove(last.Value.Key);
+            _list.RemoveLast();
+        }
+        var newNode = _list.AddFirst((key, value));
+        _map[key] = newNode;
+    }
+}
+// O(1) para get e put — estrutura combinada para resolver o problema</code></pre></div>
+            <div class="observation"><strong>Especialista:</strong> Combina estruturas para atingir complexidade ótima. Entende impacto no GC (.NET) e discute alternativas como <code>ArrayPool&lt;T&gt;</code> para hot paths.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 3: OOP -->
+    <div class="competency-panel" id="p3">
+      <div class="panel-header">
+        <div class="panel-num">03</div>
+        <div>
+          <div class="panel-title">OOP / Modelagem</div>
+          <div class="panel-tags">
+            <span class="tag">encapsulamento</span><span class="tag">herança</span>
+            <span class="tag">polimorfismo</span><span class="tag">DDD</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l1">Iniciante</span>
+            <span class="level-desc">Classe anêmica — apenas dados, sem comportamento</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Modelo anêmico — anti-pattern clássico
+public class Pedido
+{
+    public int Id { get; set; }
+    public decimal Total { get; set; }
+    public string Status { get; set; }
+    public List&lt;Item&gt; Itens { get; set; }
+}
+
+// Toda a lógica fica espalhada em Services externos
+public class PedidoService
+{
+    public void Fechar(Pedido pedido)
+    {
+        if (pedido.Total > 0 && pedido.Itens.Count > 0)
+            pedido.Status = "Fechado";
+    }
+}
+// Pedido não protege seus próprios invariantes</code></pre></div>
+            <div class="observation"><strong>Problema:</strong> Qualquer parte do sistema pode setar <code>pedido.Status = "Cancelado"</code> diretamente, sem validação. Invariantes não são protegidos.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l4">Avançado</span>
+            <span class="level-desc">Modelagem rica — comportamento e proteção de invariantes</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Modelo rico com invariantes protegidos
+public class Pedido
+{
+    private readonly List&lt;ItemPedido&gt; _itens = new();
+    public IReadOnlyList&lt;ItemPedido&gt; Itens => _itens.AsReadOnly();
+    public StatusPedido Status { get; private set; } = StatusPedido.Aberto;
+    public decimal Total => _itens.Sum(i => i.Subtotal);
+
+    public void AdicionarItem(Produto produto, int quantidade)
+    {
+        if (Status != StatusPedido.Aberto)
+            throw new InvalidOperationException("Pedido não está aberto.");
+        if (quantidade <= 0)
+            throw new ArgumentException("Quantidade deve ser positiva.");
+
+        var itemExistente = _itens.FirstOrDefault(i => i.ProdutoId == produto.Id);
+        if (itemExistente != null)
+            itemExistente.IncrementarQuantidade(quantidade);
+        else
+            _itens.Add(new ItemPedido(produto, quantidade));
+    }
+
+    public void Fechar()
+    {
+        if (!_itens.Any())
+            throw new InvalidOperationException("Pedido sem itens.");
+        Status = StatusPedido.Fechado;
+    }
+}
+// Status só muda por métodos — invariantes garantidos</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> A entidade é responsável por seus próprios invariantes. Ninguém de fora pode colocar o pedido em um estado inválido.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l5">Especialista</span>
+            <span class="level-desc">Value Objects, Aggregates, Domain Events</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Value Object — imutável, igualdade por valor
+public record Dinheiro(decimal Valor, string Moeda)
+{
+    public static Dinheiro operator +(Dinheiro a, Dinheiro b)
+    {
+        if (a.Moeda != b.Moeda)
+            throw new InvalidOperationException("Moedas diferentes.");
+        return new Dinheiro(a.Valor + b.Valor, a.Moeda);
+    }
+    public static Dinheiro Zero(string moeda) => new(0, moeda);
+}
+
+// Aggregate Root com Domain Event
+public class Pedido : AggregateRoot
+{
+    private readonly List&lt;ItemPedido&gt; _itens = new();
+    public Dinheiro Total => _itens.Aggregate(
+        Dinheiro.Zero("BRL"),
+        (acc, item) => acc + item.Subtotal);
+
+    public void Fechar()
+    {
+        if (!_itens.Any())
+            throw new DomainException("Pedido sem itens não pode ser fechado.");
+
+        Status = StatusPedido.Fechado;
+        AddDomainEvent(new PedidoFechadoEvent(Id, Total));
+    }
+}
+// Domain Event notifica outros bounded contexts de forma desacoplada</code></pre></div>
+            <div class="observation"><strong>Especialista:</strong> Domina DDD tático. Discute quando DDD é overkill (CRUD simples) e quando é essencial (domínio complexo com regras de negócio ricas).</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 4: C# / .NET -->
+    <div class="competency-panel" id="p4">
+      <div class="panel-header">
+        <div class="panel-num">04</div>
+        <div>
+          <div class="panel-title">C# / Plataforma .NET</div>
+          <div class="panel-tags">
+            <span class="tag">LINQ</span><span class="tag">async/await</span>
+            <span class="tag">generics</span><span class="tag">GC</span><span class="tag">Span&lt;T&gt;</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l2">Básico</span>
+            <span class="level-desc">Usa recursos comuns — foreach, métodos, classes</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Filtrar pedidos sem LINQ
+public List&lt;Pedido&gt; FiltrarAbertos(List&lt;Pedido&gt; pedidos)
+{
+    var resultado = new List&lt;Pedido&gt;();
+    foreach (var pedido in pedidos)
+    {
+        if (pedido.Status == "Aberto")
+            resultado.Add(pedido);
+    }
+    return resultado;
+}
+// Funciona, mas verboso para o que C# oferece</code></pre></div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l3">Intermediário</span>
+            <span class="level-desc">LINQ fluente, async/await correto, generics básicos</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// LINQ + async/await correto
+public async Task&lt;IEnumerable&lt;PedidoDto&gt;&gt; BuscarAbertosAsync(
+    CancellationToken ct = default)
+{
+    var pedidos = await _repository.GetAllAsync(ct);
+
+    return pedidos
+        .Where(p => p.Status == StatusPedido.Aberto)
+        .OrderByDescending(p => p.CriadoEm)
+        .Select(p => new PedidoDto(p.Id, p.Total, p.CriadoEm));
+}
+
+// Generic com constraint
+public async Task&lt;T?&gt; BuscarPorIdAsync&lt;T&gt;(Guid id, CancellationToken ct)
+    where T : Entity
+{
+    return await _context.Set&lt;T&gt;().FindAsync(new object[] { id }, ct);
+}
+// Não bloqueia thread com .Result ou .Wait()</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> Entende que async não é sobre velocidade, é sobre não bloquear threads. Sabe a diferença entre <code>Task.Run</code> e <code>async/await</code>.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l5">Especialista</span>
+            <span class="level-desc">Span&lt;T&gt;, ValueTask, análise do GC, paralelismo</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Processamento zero-alocação com Span&lt;T&gt;
+public static int SomarNumeros(ReadOnlySpan&lt;int&gt; numeros)
+{
+    int soma = 0;
+    foreach (var n in numeros)
+        soma += n;
+    return soma;
+}
+
+// ValueTask para hot paths (evita alocação quando já tem o resultado)
+public ValueTask&lt;Produto?&gt; BuscarProdutoAsync(Guid id)
+{
+    if (_cache.TryGetValue(id, out var produto))
+        return ValueTask.FromResult&lt;Produto?&gt;(produto); // sem alocação
+
+    return new ValueTask&lt;Produto?&gt;(BuscarNoBancoDeDadosAsync(id));
+}
+
+// Parallel.ForEachAsync para I/O bound com controle de concorrência
+await Parallel.ForEachAsync(pedidos, new ParallelOptions
+{
+    MaxDegreeOfParallelism = Environment.ProcessorCount
+}, async (pedido, ct) =>
+{
+    await ProcessarPedidoAsync(pedido, ct);
+});
+// Discute: quando Parallel, quando Channels, quando TPL Dataflow</code></pre></div>
+            <div class="observation"><strong>Especialista:</strong> Usa BenchmarkDotNet para medir, entende Gen0/Gen1/Gen2 do GC, sabe quando zero-allocation realmente importa vs. premature optimization.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 5: Banco de Dados -->
+    <div class="competency-panel" id="p5">
+      <div class="panel-header">
+        <div class="panel-num">05</div>
+        <div>
+          <div class="panel-title">Banco de Dados (SQL)</div>
+          <div class="panel-tags">
+            <span class="tag">CRUD</span><span class="tag">joins</span>
+            <span class="tag">índices</span><span class="tag">tuning</span><span class="tag">modelagem</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l1">Iniciante</span>
+            <span class="level-desc">CRUD simples, SELECT sem filtros eficientes</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">SQL</div>
+<pre><code class="language-sql">-- Busca sem index, trazendo tudo para filtrar na aplicação
+SELECT * FROM Pedidos
+
+-- Depois filtra no C#:
+-- var abertos = pedidos.Where(p => p.Status == "Aberto").ToList();
+-- Full scan na tabela inteira — péssimo em produção</code></pre></div>
+            <div class="observation"><strong>Problema:</strong> SELECT * transfere colunas desnecessárias. Filtro na aplicação em vez do banco. Em 1M de registros, isso derruba o sistema.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l3">Intermediário</span>
+            <span class="level-desc">Joins, índices, paginação, consultas projetadas</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">SQL</div>
+<pre><code class="language-sql">-- Consulta eficiente com JOIN, paginação e projeção
+SELECT
+    p.Id,
+    p.Total,
+    p.CriadoEm,
+    c.Nome AS Cliente,
+    COUNT(i.Id) AS TotalItens
+FROM Pedidos p
+INNER JOIN Clientes c ON c.Id = p.ClienteId
+INNER JOIN ItensPedido i ON i.PedidoId = p.Id
+WHERE p.Status = 'Aberto'
+  AND p.CriadoEm >= DATEADD(DAY, -30, GETDATE())
+GROUP BY p.Id, p.Total, p.CriadoEm, c.Nome
+ORDER BY p.CriadoEm DESC
+OFFSET 0 ROWS FETCH NEXT 20 ROWS ONLY;
+
+-- Índice composto para suportar esse filtro
+CREATE INDEX IX_Pedidos_Status_CriadoEm
+ON Pedidos (Status, CriadoEm DESC)
+INCLUDE (Total, ClienteId);</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> Sabe criar índices alinhados com a query. Entende <code>INCLUDE</code> para evitar key lookup. Paginação server-side.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l5">Especialista</span>
+            <span class="level-desc">Plano de execução, particionamento, estratégia de dados</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">SQL</div>
+<pre><code class="language-sql">-- Diagnóstico de query lenta com plano de execução
+SET STATISTICS IO, TIME ON;
+
+SELECT * FROM sys.dm_exec_query_stats
+CROSS APPLY sys.dm_exec_sql_text(sql_handle)
+WHERE total_elapsed_time / execution_count > 1000000  -- avg > 1s
+ORDER BY total_logical_reads / execution_count DESC;
+
+-- Window Function para evitar subquery correlacionada
+SELECT
+    p.Id,
+    p.Total,
+    SUM(p.Total) OVER (PARTITION BY p.ClienteId
+                       ORDER BY p.CriadoEm
+                       ROWS UNBOUNDED PRECEDING) AS TotalAcumulado,
+    ROW_NUMBER() OVER (PARTITION BY p.ClienteId
+                       ORDER BY p.Total DESC) AS RankPorCliente
+FROM Pedidos p;
+
+-- Columnstore Index para analytics (leitura de milhões de linhas)
+CREATE COLUMNSTORE INDEX CIX_Pedidos_Analytics
+ON Pedidos (CriadoEm, Total, Status, ClienteId);</code></pre></div>
+            <div class="observation"><strong>Especialista:</strong> Lê plano de execução como código. Discute OLTP vs OLAP, quando usar columnstore, quando partir a tabela, e como medir impacto real.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 6: Engenharia de Software -->
+    <div class="competency-panel" id="p6">
+      <div class="panel-header">
+        <div class="panel-num">06</div>
+        <div>
+          <div class="panel-title">Engenharia de Software</div>
+          <div class="panel-tags">
+            <span class="tag">SOLID</span><span class="tag">DRY</span>
+            <span class="tag">YAGNI</span><span class="tag">Clean Code</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l1">Iniciante</span>
+            <span class="level-desc">Código funcional mas sem estrutura — método faz tudo</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// God method — viola SRP, Open/Closed e DRY
+public async Task ProcessarPedido(int pedidoId, string tipoDesconto)
+{
+    var conn = new SqlConnection("Server=prod;Database=db;...");
+    conn.Open();
+    var pedido = conn.QuerySingle&lt;Pedido&gt;(
+        "SELECT * FROM Pedidos WHERE Id = @id", new { id = pedidoId });
+
+    decimal desconto = 0;
+    if (tipoDesconto == "VIP") desconto = 0.20m;
+    else if (tipoDesconto == "PROMO") desconto = 0.10m;
+    else if (tipoDesconto == "FUNCIONARIO") desconto = 0.30m;
+
+    pedido.Total -= pedido.Total * desconto;
+    pedido.Status = "Processado";
+
+    // enviar email inline...
+    var smtp = new SmtpClient("mail.server.com");
+    smtp.Send(new MailMessage("<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="82ecedaff0e7f2eefbc2e1edace1edef">[email&#160;protected]</a>", pedido.Email,
+        "Pedido processado", $"Total: {pedido.Total}"));
+
+    conn.Execute("UPDATE Pedidos SET Total=@t, Status=@s WHERE Id=@id",
+        new { t = pedido.Total, s = pedido.Status, id = pedidoId });
+}
+// Banco, regra de negócio e email no mesmo lugar</code></pre></div>
+            <div class="observation"><strong>Sinal de alerta:</strong> Impossível testar, impossível trocar o banco ou o provedor de e-mail sem mudar esse método. Acoplamento total.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l4">Avançado</span>
+            <span class="level-desc">Aplica SOLID conscientemente — cada classe tem uma razão para mudar</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Open/Closed Principle — adicionar desconto sem modificar código existente
+public interface ICalculadorDesconto
+{
+    bool Aplica(Pedido pedido);
+    decimal Calcular(Pedido pedido);
+}
+
+public class DescontoVip : ICalculadorDesconto
+{
+    public bool Aplica(Pedido p) => p.Cliente.IsVip;
+    public decimal Calcular(Pedido p) => p.Total * 0.20m;
+}
+
+public class DescontoPromo : ICalculadorDesconto
+{
+    public bool Aplica(Pedido p) => p.CriadoEm.Month == 11; // novembro
+    public decimal Calcular(Pedido p) => p.Total * 0.10m;
+}
+
+// Handler usa DIP — depende de abstrações
+public class ProcessarPedidoHandler
+{
+    private readonly IPedidoRepository _repo;
+    private readonly IEnumerable&lt;ICalculadorDesconto&gt; _descontos;
+    private readonly INotificador _notificador;
+
+    public ProcessarPedidoHandler(
+        IPedidoRepository repo,
+        IEnumerable&lt;ICalculadorDesconto&gt; descontos,
+        INotificador notificador)
+    {
+        _repo = repo;
+        _descontos = descontos;
+        _notificador = notificador;
+    }
+
+    public async Task Handle(ProcessarPedidoCommand cmd, CancellationToken ct)
+    {
+        var pedido = await _repo.GetByIdAsync(cmd.PedidoId, ct);
+        var desconto = _descontos.FirstOrDefault(d => d.Aplica(pedido));
+        if (desconto != null) pedido.AplicarDesconto(desconto.Calcular(pedido));
+        pedido.Processar();
+        await _repo.SaveAsync(pedido, ct);
+        await _notificador.NotificarAsync(pedido, ct);
+    }
+}
+// Novo tipo de desconto = nova classe, zero mudança no handler</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> Entende que SOLID não é um checklist, é um guia para minimizar o custo de mudança. Questiona quando vale a complexidade adicional.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 7: Testes -->
+    <div class="competency-panel" id="p7">
+      <div class="panel-header">
+        <div class="panel-num">07</div>
+        <div>
+          <div class="panel-title">Testes Automatizados</div>
+          <div class="panel-tags">
+            <span class="tag">xUnit</span><span class="tag">Moq</span>
+            <span class="tag">TDD</span><span class="tag">integration tests</span><span class="tag">AAA</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l2">Básico</span>
+            <span class="level-desc">Testes simples que apenas verificam o caminho feliz</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Teste básico sem mock, sem casos negativos
+[Fact]
+public void Somar_DeveRetornarResultado()
+{
+    var calc = new Calculadora();
+    var resultado = calc.Somar(2, 3);
+    Assert.Equal(5, resultado);
+}
+// Não testa comportamentos de borda, exceções, ou colaboradores</code></pre></div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l3">Intermediário</span>
+            <span class="level-desc">AAA, mocks, múltiplos cenários incluindo casos negativos</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Arrange-Act-Assert com Moq
+public class ProcessarPedidoHandlerTests
+{
+    private readonly Mock&lt;IPedidoRepository&gt; _repoMock = new();
+    private readonly Mock&lt;INotificador&gt; _notifMock = new();
+    private readonly ProcessarPedidoHandler _handler;
+
+    public ProcessarPedidoHandlerTests()
+    {
+        _handler = new ProcessarPedidoHandler(
+            _repoMock.Object, [], _notifMock.Object);
+    }
+
+    [Fact]
+    public async Task Handle_PedidoValido_DeveSalvarENotificar()
+    {
+        // Arrange
+        var pedido = PedidoBuilder.Valido().Build();
+        _repoMock.Setup(r => r.GetByIdAsync(pedido.Id, default))
+                 .ReturnsAsync(pedido);
+
+        // Act
+        await _handler.Handle(new ProcessarPedidoCommand(pedido.Id), default);
+
+        // Assert
+        _repoMock.Verify(r => r.SaveAsync(pedido, default), Times.Once);
+        _notifMock.Verify(n => n.NotificarAsync(pedido, default), Times.Once);
+    }
+
+    [Fact]
+    public async Task Handle_PedidoNaoEncontrado_DeveLancarExcecao()
+    {
+        // Arrange
+        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny&lt;Guid&gt;(), default))
+                 .ReturnsAsync((Pedido?)null);
+
+        // Act & Assert
+        await Assert.ThrowsAsync&lt;PedidoNaoEncontradoException&gt;(
+            () => _handler.Handle(new ProcessarPedidoCommand(Guid.NewGuid()), default));
+    }
+}</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> Testa comportamento, não implementação. Mock de dependências externas. Nomeia testes como especificações legíveis.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l5">Especialista</span>
+            <span class="level-desc">Pirâmide de testes, mutation testing, testes de integração com TestContainers</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Teste de integração com banco real via TestContainers
+public class PedidoRepositoryIntegrationTests
+    : IAsyncLifetime
+{
+    private readonly PostgreSqlContainer _db = new PostgreSqlBuilder()
+        .WithImage("postgres:16")
+        .Build();
+
+    public async Task InitializeAsync()
+    {
+        await _db.StartAsync();
+        // Aplica migrations no banco temporário
+        var ctx = CriarContexto(_db.GetConnectionString());
+        await ctx.Database.MigrateAsync();
+    }
+
+    [Fact]
+    public async Task Salvar_PedidoComItens_DevePersistirGrafo()
+    {
+        // Arrange
+        var ctx = CriarContexto(_db.GetConnectionString());
+        var repo = new PedidoRepository(ctx);
+        var pedido = PedidoBuilder.ComItens(3).Build();
+
+        // Act
+        await repo.SaveAsync(pedido, default);
+
+        // Assert — consulta direta ao banco para verificar persistência real
+        var pedidoSalvo = await ctx.Pedidos
+            .Include(p => p.Itens)
+            .SingleAsync(p => p.Id == pedido.Id);
+
+        Assert.Equal(3, pedidoSalvo.Itens.Count);
+    }
+
+    public async Task DisposeAsync() => await _db.DisposeAsync();
+}</code></pre></div>
+            <div class="observation"><strong>Especialista:</strong> Define a estratégia de testes do time. Conhece mutation testing (Stryker.NET) para medir qualidade real dos testes. Sabe quando integration &gt; unit.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 8: APIs -->
+    <div class="competency-panel" id="p8">
+      <div class="panel-header">
+        <div class="panel-num">08</div>
+        <div>
+          <div class="panel-title">APIs e Integrações</div>
+          <div class="panel-tags">
+            <span class="tag">REST</span><span class="tag">versionamento</span>
+            <span class="tag">contratos</span><span class="tag">mensageria</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l2">Básico</span>
+            <span class="level-desc">Cria endpoints que funcionam mas sem design REST correto</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Endpoints que violam REST — verbos na URL, status codes errados
+[HttpGet("/buscarPedido")]          // GET com verbo na URL
+[HttpPost("/deletarPedido")]       // DELETE via POST
+[HttpPost("/atualizarStatusPedido")] // PUT/PATCH via POST
+
+public IActionResult BuscarPedido(int id)
+{
+    var pedido = _repo.Get(id);
+    if (pedido == null)
+        return Ok(new { erro = "não encontrado" }); // 200 para erro!
+    return Ok(pedido);
+}</code></pre></div>
+            <div class="observation"><strong>Problemas:</strong> Verbo na URL, método HTTP errado, status 200 para erro. Clientes não conseguem tratar erros corretamente.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l4">Avançado</span>
+            <span class="level-desc">Versionamento, ProblemDetails, contratos estáveis</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// REST semântico com versionamento e ProblemDetails
+[ApiController]
+[ApiVersion("2.0")]
+[Route("api/v{version:apiVersion}/pedidos")]
+public class PedidosController : ControllerBase
+{
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType&lt;PedidoResponse&gt;(StatusCodes.Status200OK)]
+    [ProducesResponseType&lt;ProblemDetails&gt;(StatusCodes.Status404NotFound)]
+    public async Task&lt;ActionResult&lt;PedidoResponse&gt;&gt; Get(
+        Guid id, CancellationToken ct)
+    {
+        var pedido = await _mediator.Send(new BuscarPedidoQuery(id), ct);
+        return pedido is null ? NotFound() : Ok(PedidoResponse.From(pedido));
+    }
+
+    [HttpPatch("{id:guid}/status")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType&lt;ValidationProblemDetails&gt;(StatusCodes.Status422UnprocessableEntity)]
+    public async Task&lt;IActionResult&gt; AtualizarStatus(
+        Guid id, AtualizarStatusRequest request, CancellationToken ct)
+    {
+        await _mediator.Send(new AtualizarStatusCommand(id, request.Status), ct);
+        return NoContent();
+    }
+}
+// Versão antiga (v1) continua funcionando sem quebrar clientes</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> Pensa na API como um contrato público. Breaking changes só em nova versão. ProblemDetails (RFC 7807) para erros padronizados.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 16: Arquitetura -->
+    <div class="competency-panel" id="p16">
+      <div class="panel-header">
+        <div class="panel-num">16</div>
+        <div>
+          <div class="panel-title">Arquitetura de Software</div>
+          <div class="panel-tags">
+            <span class="tag">Clean Arch</span><span class="tag">microservices</span>
+            <span class="tag">CQRS</span><span class="tag">Event Sourcing</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l2">Básico</span>
+            <span class="level-desc">Entende o fluxo mas mistura camadas</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Controller acessando banco diretamente — sem separação de camadas
+[HttpGet("{id}")]
+public async Task&lt;IActionResult&gt; Get(int id)
+{
+    // Lógica de negócio no controller
+    using var conn = new SqlConnection(_config["ConnectionString"]);
+    var pedido = await conn.QuerySingleOrDefaultAsync&lt;Pedido&gt;(
+        "SELECT * FROM Pedidos WHERE Id = @id", new { id });
+
+    if (pedido == null) return NotFound();
+
+    // Regra de negócio no controller
+    if (pedido.Total > 1000) pedido.Desconto = 0.05m;
+
+    return Ok(pedido);
+}
+// Presentation, Domain e Infra colapsados no mesmo lugar</code></pre></div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l4">Avançado</span>
+            <span class="level-desc">Clean Architecture com inversão de dependência</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo</div>
+            <div class="code-block"><div class="code-lang">TEXTO</div>
+<pre><code>Estrutura Clean Architecture:
+
+src/
+├── Domain/               ← sem dependências externas
+│   ├── Entities/
+│   ├── ValueObjects/
+│   ├── Interfaces/       ← IPedidoRepository (abstração)
+│   └── DomainEvents/
+│
+├── Application/          ← depende apenas de Domain
+│   ├── Commands/
+│   ├── Queries/
+│   └── Handlers/
+│
+├── Infrastructure/       ← implementa interfaces do Domain
+│   ├── Persistence/      ← PedidoRepository : IPedidoRepository
+│   ├── Messaging/
+│   └── External/
+│
+└── Presentation/         ← depende de Application
+    ├── Controllers/
+    └── Middleware/
+
+REGRA: setas de dependência sempre apontam para dentro.
+Infrastructure conhece Domain. Domain NÃO conhece Infrastructure.</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> A regra de dependência garante que você pode trocar o banco de dados sem tocar em Domain ou Application.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l5">Especialista</span>
+            <span class="level-desc">CQRS, Event Sourcing, decisões de trade-offs com dados</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Event Sourcing — estado derivado de eventos imutáveis
+public class PedidoAggregate
+{
+    private readonly List&lt;IDomainEvent&gt; _eventos = new();
+    public Guid Id { get; private set; }
+    public StatusPedido Status { get; private set; }
+    public decimal Total { get; private set; }
+
+    // Reconstitui estado a partir de eventos (replay)
+    public static PedidoAggregate From(IEnumerable&lt;IDomainEvent&gt; eventos)
+    {
+        var aggregate = new PedidoAggregate();
+        foreach (var evento in eventos)
+            aggregate.Apply(evento);
+        return aggregate;
+    }
+
+    public void Fechar()
+    {
+        if (Status != StatusPedido.Aberto)
+            throw new DomainException("Pedido não está aberto.");
+        var evento = new PedidoFechadoEvent(Id, DateTime.UtcNow);
+        Apply(evento);
+        _eventos.Add(evento); // persiste o evento, não o estado
+    }
+
+    private void Apply(IDomainEvent e)
+    {
+        switch (e)
+        {
+            case PedidoFechadoEvent:
+                Status = StatusPedido.Fechado;
+                break;
+            case ItemAdicionadoEvent item:
+                Total += item.Subtotal;
+                break;
+        }
+    }
+}
+// Audit log gratuito. Time travel. Projeções customizadas.</code></pre></div>
+            <div class="observation"><strong>Especialista:</strong> Sabe que Event Sourcing resolve auditoria e time travel, mas adiciona complexidade. Decide com base em requisitos reais, não hype. Discute eventual consistency, snapshots, e projeções.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 13: Performance -->
+    <div class="competency-panel" id="p13">
+      <div class="panel-header">
+        <div class="panel-num">13</div>
+        <div>
+          <div class="panel-title">Performance</div>
+          <div class="panel-tags">
+            <span class="tag">cache</span><span class="tag">profiling</span>
+            <span class="tag">N+1</span><span class="tag">BenchmarkDotNet</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l1">Iniciante</span>
+            <span class="level-desc">Não percebe o problema N+1 — a armadilha mais comum</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Problema N+1 — dispara 1 query por pedido!
+var pedidos = await _ctx.Pedidos.ToListAsync(); // 1 query
+
+foreach (var pedido in pedidos)
+{
+    // Lazy loading dispara 1 query POR pedido no loop
+    var itens = pedido.Itens; // N queries!
+    Console.WriteLine($"Pedido {pedido.Id}: {itens.Count} itens");
+}
+// 100 pedidos = 101 queries ao banco</code></pre></div>
+            <div class="observation"><strong>Impacto real:</strong> Em produção com 1000 pedidos, são 1001 roundtrips ao banco. De 100ms vira 10 segundos ou mais.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l3">Intermediário</span>
+            <span class="level-desc">Resolve N+1, usa cache, identifica gargalos óbvios</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Eager loading — 1 query com JOIN
+var pedidos = await _ctx.Pedidos
+    .Include(p => p.Itens)
+    .Include(p => p.Cliente)
+    .AsNoTracking()      // sem tracking para read-only
+    .ToListAsync();
+
+// Cache com IMemoryCache — evita repetir query cara
+public async Task&lt;Produto?&gt; BuscarProdutoAsync(Guid id)
+{
+    var cacheKey = $"produto:{id}";
+    if (_cache.TryGetValue(cacheKey, out Produto? cached)) return cached;
+
+    var produto = await _repo.GetByIdAsync(id);
+    if (produto != null)
+        _cache.Set(cacheKey, produto, TimeSpan.FromMinutes(5));
+
+    return produto;
+}
+// AsNoTracking() economiza ~30% de memória em reads</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> Mede antes de otimizar. Sabe que AsNoTracking() é crucial em reads. Conhece os logs do EF Core para detectar N+1.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l5">Especialista</span>
+            <span class="level-desc">Profiling com BenchmarkDotNet, cache distribuído, arquitetura de alta performance</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// BenchmarkDotNet — mede com rigor estatístico
+[MemoryDiagnoser]
+[SimpleJob(RuntimeMoniker.Net90)]
+public class BuscaPedidoBenchmark
+{
+    [Params(100, 1000, 10000)]
+    public int N;
+
+    [Benchmark(Baseline = true)]
+    public async Task&lt;List&lt;Pedido&gt;&gt; ComEfCore()
+        => await _ctx.Pedidos.Take(N).ToListAsync();
+
+    [Benchmark]
+    public async Task&lt;IEnumerable&lt;Pedido&gt;&gt; ComDapper()
+        => await _conn.QueryAsync&lt;Pedido&gt;(
+            "SELECT TOP(@n) * FROM Pedidos", new { n = N });
+}
+
+// Cache distribuído com Redis + Stampede protection
+public async Task&lt;T?&gt; GetOrSetAsync&lt;T&gt;(
+    string key, Func&lt;Task&lt;T&gt;&gt; factory, TimeSpan ttl)
+{
+    var cached = await _redis.GetAsync(key);
+    if (cached != null) return Deserialize&lt;T&gt;(cached);
+
+    // Probabilistic early expiration — evita thundering herd
+    await _semaphore.WaitAsync();
+    try
+    {
+        cached = await _redis.GetAsync(key); // double-check
+        if (cached != null) return Deserialize&lt;T&gt;(cached);
+
+        var value = await factory();
+        await _redis.SetAsync(key, Serialize(value), ttl);
+        return value;
+    }
+    finally { _semaphore.Release(); }
+}</code></pre></div>
+            <div class="observation"><strong>Especialista:</strong> Mede com rigor (não "parece mais rápido"). Conhece thundering herd, cache stampede, e como o GC impacta latência de tail percentil (p99).</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 15: Segurança -->
+    <div class="competency-panel" id="p15">
+      <div class="panel-header">
+        <div class="panel-num">15</div>
+        <div>
+          <div class="panel-title">Segurança</div>
+          <div class="panel-tags">
+            <span class="tag">JWT</span><span class="tag">OAuth2</span>
+            <span class="tag">SQL Injection</span><span class="tag">OWASP</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l1">Iniciante</span>
+            <span class="level-desc">Código vulnerável a SQL Injection e exposição de dados</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// SQL Injection clássica — concatenação de string
+public Usuario? Autenticar(string login, string senha)
+{
+    var query = $"SELECT * FROM Usuarios WHERE Login='{login}' AND Senha='{senha}'";
+    // Ataque: login = "admin' --"
+    // Query vira: SELECT * FROM Usuarios WHERE Login='admin' --' AND Senha='...'
+    // O -- comenta o resto — bypass de autenticação total
+
+    return _conn.QuerySingleOrDefault&lt;Usuario&gt;(query);
+}
+// Senha armazenada em texto puro no banco</code></pre></div>
+            <div class="observation"><strong>Crítico:</strong> SQL injection é o #1 do OWASP há décadas. Além disso, senha em texto puro é catástrofe em caso de vazamento de banco.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l3">Intermediário</span>
+            <span class="level-desc">Parameterized queries, hash de senha, JWT correto</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Autenticação segura
+public async Task&lt;string?&gt; AutenticarAsync(string login, string senha)
+{
+    // Parameterized query — impossível injetar
+    var usuario = await _conn.QuerySingleOrDefaultAsync&lt;Usuario&gt;(
+        "SELECT * FROM Usuarios WHERE Login = @login",
+        new { login });
+
+    if (usuario == null) return null;
+
+    // BCrypt com work factor adequado (12+)
+    if (!BCrypt.Net.BCrypt.Verify(senha, usuario.SenhaHash))
+        return null;
+
+    // JWT com claims mínimos necessários
+    var claims = new[]
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim("role", usuario.Perfil)
+    };
+
+    var token = new JwtSecurityToken(
+        issuer: _config["Jwt:Issuer"],
+        audience: _config["Jwt:Audience"],
+        claims: claims,
+        expires: DateTime.UtcNow.AddHours(1),
+        signingCredentials: _credentials);
+
+    return new JwtSecurityTokenHandler().WriteToken(token);
+}
+// Nunca retorna "senha incorreta" vs "usuário não encontrado" separados</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> Timing attack prevention — mesma mensagem para usuário inválido e senha errada. BCrypt com custo adequado ao hardware.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 9: Frontend -->
+    <div class="competency-panel" id="p9">
+      <div class="panel-header">
+        <div class="panel-num">09</div>
+        <div>
+          <div class="panel-title">Desenvolvimento Web</div>
+          <div class="panel-tags">
+            <span class="tag">HTML</span><span class="tag">CSS</span>
+            <span class="tag">JavaScript</span><span class="tag">Fetch API</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l1">Iniciante</span>
+            <span class="level-desc">HTML básico sem semântica, JS inline</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">HTML</div>
+<pre><code class="language-html">&lt;!-- Sem semântica, estilos inline, JS misturado --&gt;
+&lt;div onclick="document.getElementById('msg').innerHTML='Enviado!'"
+     style="background:blue; color:white; padding:10px; cursor:pointer"&gt;
+  Enviar
+&lt;/div&gt;
+&lt;div id="msg"&gt;&lt;/div&gt;
+
+&lt;!-- Problemas:
+  - div no lugar de button (inacessível, sem Tab, sem Enter)
+  - estilos inline não reutilizáveis
+  - JS na tag HTML
+  - innerHTML abre XSS
+--&gt;</code></pre></div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l3">Intermediário</span>
+            <span class="level-desc">HTML semântico, fetch correto, manipulação de DOM segura</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">JS</div>
+<pre><code class="language-javascript">// Fetch com tratamento de erro e loading state
+async function buscarPedidos() {
+  const btn = document.querySelector('#btn-buscar');
+  const lista = document.querySelector('#lista-pedidos');
+
+  btn.disabled = true;
+  btn.textContent = 'Carregando...';
+
+  try {
+    const res = await fetch('/api/v1/pedidos', {
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const pedidos = await res.json();
+
+    // textContent em vez de innerHTML — sem risco de XSS
+    lista.innerHTML = '';
+    pedidos.forEach(p => {
+      const li = document.createElement('li');
+      li.textContent = `Pedido #${p.id} — R$ ${p.total.toFixed(2)}`;
+      lista.appendChild(li);
+    });
+  } catch (err) {
+    console.error('Erro ao buscar pedidos:', err);
+    lista.textContent = 'Erro ao carregar pedidos.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Buscar';
+  }
+}
+// textContent previne XSS. Loading state melhora UX.</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> Diferença entre innerHTML e textContent. Loading state e error state explícitos. Token nos headers, não na URL.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 11: DevOps -->
+    <div class="competency-panel" id="p11">
+      <div class="panel-header">
+        <div class="panel-num">11</div>
+        <div>
+          <div class="panel-title">DevOps / CI-CD</div>
+          <div class="panel-tags">
+            <span class="tag">GitHub Actions</span><span class="tag">Docker</span>
+            <span class="tag">pipelines</span><span class="tag">automação</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l3">Intermediário</span>
+            <span class="level-desc">Configura pipeline completo com build, test e deploy</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo — GitHub Actions</div>
+            <div class="code-block"><div class="code-lang">YAML</div>
+<pre><code class="language-yaml">name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test --no-build --configuration Release
+          --collect:"XPlat Code Coverage"
+          --results-directory ./coverage
+
+      - name: Publish coverage
+        uses: codecov/codecov-action@v4
+        with:
+          directory: ./coverage
+
+  deploy:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Deploy to Azure
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: minha-api
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> Deploy só ocorre se os testes passam. Separação de ambientes. Secrets em variáveis de ambiente, nunca no código.</div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l5">Especialista</span>
+            <span class="level-desc">Dockerfile otimizado, Blue-Green deploy, rollback automático</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo — Dockerfile multi-stage</div>
+            <div class="code-block"><div class="code-lang">DOCKER</div>
+<pre><code class="language-dockerfile"># Stage 1: Build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+# Copia apenas csproj primeiro — aproveita cache de camadas
+COPY *.sln ./
+COPY src/**/*.csproj ./
+RUN dotnet restore
+
+COPY . .
+RUN dotnet publish src/Api/Api.csproj \
+    --configuration Release \
+    --no-restore \
+    --output /app/publish \
+    /p:UseAppHost=false
+
+# Stage 2: Runtime — imagem mínima
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS runtime
+WORKDIR /app
+
+# Usuário não-root — segurança
+RUN adduser --disabled-password --gecos '' appuser
+USER appuser
+
+COPY --from=build /app/publish .
+
+# Healthcheck para orquestrador
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s \
+  CMD wget -q --spider http://localhost:8080/health || exit 1
+
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "Api.dll"]
+# Imagem final ~100MB em vez de ~800MB do SDK</code></pre></div>
+            <div class="observation"><strong>Especialista:</strong> Multi-stage reduz imagem 8x. Usuário não-root. Layer caching estratégico (csproj antes do código). Healthcheck para Kubernetes.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 14: Observabilidade -->
+    <div class="competency-panel" id="p14">
+      <div class="panel-header">
+        <div class="panel-num">14</div>
+        <div>
+          <div class="panel-title">Observabilidade</div>
+          <div class="panel-tags">
+            <span class="tag">logs</span><span class="tag">métricas</span>
+            <span class="tag">tracing</span><span class="tag">OpenTelemetry</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l1">Iniciante</span>
+            <span class="level-desc">Console.WriteLine para debug — inútil em produção</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Debug com Console — não aparece em produção, não tem contexto
+public async Task ProcessarPedido(Guid id)
+{
+    Console.WriteLine("Iniciando processamento...");
+    Console.WriteLine($"ID: {id}");
+    // ... lógica
+    Console.WriteLine("Concluído!");
+}
+// Em Kubernetes/Azure App Service, esses logs somem ou são inúteis</code></pre></div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l4">Avançado</span>
+            <span class="level-desc">Structured logging, métricas, distributed tracing</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de código</div>
+            <div class="code-block"><div class="code-lang">C#</div>
+<pre><code class="language-csharp">// Structured logging com Serilog + OpenTelemetry
+public class ProcessarPedidoHandler
+{
+    private static readonly ActivitySource _activity = new("Pedidos.Handler");
+    private static readonly Counter&lt;int&gt; _pedidosProcessados =
+        Metrics.CreateMeter("pedidos").CreateCounter&lt;int&gt;("pedidos_processados");
+
+    private readonly ILogger&lt;ProcessarPedidoHandler&gt; _logger;
+
+    public async Task Handle(ProcessarPedidoCommand cmd, CancellationToken ct)
+    {
+        using var span = _activity.StartActivity("ProcessarPedido");
+        span?.SetTag("pedido.id", cmd.PedidoId.ToString());
+
+        _logger.LogInformation(
+            "Iniciando processamento do pedido {PedidoId}", cmd.PedidoId);
+
+        try
+        {
+            // ... lógica
+            _pedidosProcessados.Add(1, new TagList
+            {
+                { "status", "sucesso" },
+                { "tipo", cmd.Tipo }
+            });
+
+            _logger.LogInformation(
+                "Pedido {PedidoId} processado com sucesso em {Elapsed}ms",
+                cmd.PedidoId, span?.Duration.TotalMilliseconds);
+        }
+        catch (Exception ex)
+        {
+            span?.SetStatus(ActivityStatusCode.Error, ex.Message);
+            _logger.LogError(ex,
+                "Falha ao processar pedido {PedidoId}", cmd.PedidoId);
+            throw;
+        }
+    }
+}
+// Logs estruturados são consultáveis no Datadog/Grafana por campo</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> Log estruturado permite filtrar <code>pedido.id = "abc-123"</code> diretamente. Span conecta a requisição por toda a cadeia de microserviços (trace).</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 17: Code Review -->
+    <div class="competency-panel" id="p17">
+      <div class="panel-header">
+        <div class="panel-num">17</div>
+        <div>
+          <div class="panel-title">Qualidade e Code Review</div>
+          <div class="panel-tags">
+            <span class="tag">refatoração</span><span class="tag">feedback</span>
+            <span class="tag">padrões</span><span class="tag">guidelines</span>
+          </div>
+        </div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l1">Iniciante</span>
+            <span class="level-desc">Review superficial — apenas "LGTM" sem análise real</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de comentário de review</div>
+            <div class="code-block"><div class="code-lang">REVIEW</div>
+<pre><code>PR: Adiciona endpoint de pedidos
+Reviewer: 👍 LGTM
+
+// Não percebeu:
+// - SQL Injection na query
+// - N+1 nas coleções
+// - Token JWT sem expiração
+// - Sem testes
+// - Exception swallowed com catch vazio</code></pre></div>
+          </div>
+        </div>
+
+        <div class="level-card" onclick="toggleCard(this)">
+          <div class="level-header">
+            <span class="level-badge l4">Avançado</span>
+            <span class="level-desc">Review estruturado — segurança, performance, design, legibilidade</span>
+            <span class="level-chevron">▼</span>
+          </div>
+          <div class="level-body">
+            <div class="example-label">exemplo de comentário de review</div>
+            <div class="code-block"><div class="code-lang">REVIEW</div>
+<pre><code>🔴 BLOCKER — Segurança
+Linha 42: SQL construído via concatenação é vulnerável a injection.
+Use parâmetros: WHERE Login = @login
+
+🔴 BLOCKER — Performance  
+Linha 78: Lazy loading dentro do foreach vai disparar N+1 queries.
+Adicione .Include(p => p.Itens) na query principal.
+
+🟡 IMPORTANTE — Resiliência
+Linha 95: catch vazio descarta a exceção silenciosamente.
+Ao menos logue: _logger.LogError(ex, "Mensagem")
+
+🟢 SUGESTÃO — Legibilidade
+Linha 110: Esse bloco de 30 linhas poderia ser extraído para
+CalcularDesconto(pedido, tipoDesconto). Fica mais testável e legível.
+
+💬 Pergunta
+Linha 55: Por que usamos .Result aqui em vez de await? 
+Isso bloqueia a thread — há uma razão específica?
+
+Total: 2 blockers, 1 importante, 1 sugestão, 1 pergunta</code></pre></div>
+            <div class="observation"><strong>Marco:</strong> Categoriza por severidade. Explica o motivo, não só aponta o problema. Faz perguntas quando não entende a intenção. Tom construtivo.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+hljs.highlightAll();
+
+function toggleCard(card) {
+  card.classList.toggle('open');
+}
+
+function showOverview(navItem) {
+  // Hide all panels
+  document.querySelectorAll('.competency-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('overview-panel').style.display = 'block';
+
+  // Update nav
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navItem) navItem.classList.add('active');
+}
+
+function showPanel(panelId, navItem) {
+  // Hide overview
+  document.getElementById('overview-panel').style.display = 'none';
+
+  // Hide all panels
+  document.querySelectorAll('.competency-panel').forEach(p => p.classList.remove('active'));
+
+  // Show target
+  const panel = document.getElementById(panelId);
+  if (panel) panel.classList.add('active');
+
+  // Update nav
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navItem) {
+    navItem.classList.add('active');
+  } else {
+    // Find matching nav item
+    document.querySelectorAll('.nav-item').forEach(n => {
+      if (n.getAttribute('onclick')?.includes(panelId)) n.classList.add('active');
+    });
+  }
+
+  // Re-h
