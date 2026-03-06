@@ -134,21 +134,24 @@ h1 span { color: var(--accent); }
     <div class="sidebar-section">Fundamentos</div>
     <div class="nav-item" onclick="showPanel('p1',this)"><span class="nav-num">01</span> Algoritmos e Lógica</div>
     <div class="nav-item" onclick="showPanel('p2',this)"><span class="nav-num">02</span> Estrutura de Dados</div>
-    <div class="nav-item" onclick="showPanel('p3',this)"><span class="nav-num">03</span> OOP / Modelagem</div>
+    <div class="nav-item" onclick="showPanel('p3',this)"><span class="nav-num">03</span> Orientação a Objetos</div>
     <div class="sidebar-section">Backend</div>
     <div class="nav-item" onclick="showPanel('p4',this)"><span class="nav-num">04</span> C# / .NET</div>
     <div class="nav-item" onclick="showPanel('p5',this)"><span class="nav-num">05</span> Banco de Dados</div>
     <div class="nav-item" onclick="showPanel('p6',this)"><span class="nav-num">06</span> Engenharia de Software</div>
     <div class="nav-item" onclick="showPanel('p7',this)"><span class="nav-num">07</span> Testes Automatizados</div>
     <div class="nav-item" onclick="showPanel('p8',this)"><span class="nav-num">08</span> APIs e Integrações</div>
-    <div class="sidebar-section">Arquitetura</div>
-    <div class="nav-item" onclick="showPanel('p16',this)"><span class="nav-num">16</span> Arquitetura de Software</div>
-    <div class="nav-item" onclick="showPanel('p13',this)"><span class="nav-num">13</span> Performance</div>
-    <div class="nav-item" onclick="showPanel('p15',this)"><span class="nav-num">15</span> Segurança</div>
-    <div class="sidebar-section">Frontend &amp; Ops</div>
+    <div class="sidebar-section">Frontend</div>
     <div class="nav-item" onclick="showPanel('p9',this)"><span class="nav-num">09</span> Desenvolvimento Web</div>
+    <div class="nav-item" onclick="showPanel('p10',this)"><span class="nav-num">10</span> Frameworks Web</div>
+    <div class="sidebar-section">Infraestrutura</div>
     <div class="nav-item" onclick="showPanel('p11',this)"><span class="nav-num">11</span> DevOps / CI-CD</div>
+    <div class="nav-item" onclick="showPanel('p12',this)"><span class="nav-num">12</span> Cloud / Infraestrutura</div>
+    <div class="sidebar-section">Qualidade & Arquitetura</div>
+    <div class="nav-item" onclick="showPanel('p13',this)"><span class="nav-num">13</span> Performance</div>
     <div class="nav-item" onclick="showPanel('p14',this)"><span class="nav-num">14</span> Observabilidade</div>
+    <div class="nav-item" onclick="showPanel('p15',this)"><span class="nav-num">15</span> Segurança</div>
+    <div class="nav-item" onclick="showPanel('p16',this)"><span class="nav-num">16</span> Arquitetura de Software</div>
     <div class="nav-item" onclick="showPanel('p17',this)"><span class="nav-num">17</span> Qualidade e Code Review</div>
   </nav>
 
@@ -209,8 +212,10 @@ h1 span { color: var(--accent); }
         <div class="overview-card" onclick="showPanel('p6',null)"><div class="ov-num">06</div><div class="ov-title">Engenharia de Software</div><div class="ov-levels"><div class="ov-dot" style="background:var(--lvl1)"></div><div class="ov-dot" style="background:var(--lvl2)"></div><div class="ov-dot" style="background:var(--lvl3)"></div><div class="ov-dot" style="background:var(--lvl4)"></div><div class="ov-dot" style="background:var(--lvl5)"></div></div></div>
         <div class="overview-card" onclick="showPanel('p7',null)"><div class="ov-num">07</div><div class="ov-title">Testes Automatizados</div><div class="ov-levels"><div class="ov-dot" style="background:var(--lvl1)"></div><div class="ov-dot" style="background:var(--lvl2)"></div><div class="ov-dot" style="background:var(--lvl3)"></div><div class="ov-dot" style="background:var(--lvl4)"></div><div class="ov-dot" style="background:var(--lvl5)"></div></div></div>
         <div class="overview-card" onclick="showPanel('p8',null)"><div class="ov-num">08</div><div class="ov-title">APIs e Integrações</div><div class="ov-levels"><div class="ov-dot" style="background:var(--lvl1)"></div><div class="ov-dot" style="background:var(--lvl2)"></div><div class="ov-dot" style="background:var(--lvl3)"></div><div class="ov-dot" style="background:var(--lvl4)"></div><div class="ov-dot" style="background:var(--lvl5)"></div></div></div>
-        <div class="overview-card" onclick="showPanel('p9',null)"><div class="ov-num">09</div><div class="ov-title">Desenvolvimento Web</div><div class="ov-levels"><div class="ov-dot" style="background:var(--lvl1)"></div><div class="ov-dot" style="background:var(--lvl2)"></div><div class="ov-dot" style="background:var(--lvl3)"></div><div class="ov-dot" style="background:var(--lvl4)"></div><div class="ov-dot" style="background:var(--lvl5)"></div></div></div>
-        <div class="overview-card" onclick="showPanel('p11',null)"><div class="ov-num">11</div><div class="ov-title">DevOps / CI-CD</div><div class="ov-levels"><div class="ov-dot" style="background:var(--lvl1)"></div><div class="ov-dot" style="background:var(--lvl2)"></div><div class="ov-dot" style="background:var(--lvl3)"></div><div class="ov-dot" style="background:var(--lvl4)"></div><div class="ov-dot" style="background:var(--lvl5)"></div></div></div>
+        <div class="overview-card" onclick="showPanel('p9',null)"><div class="ov-num">09</div><div class="ov-title">Desenvolvimento Web</div><div class="ov-levels"><div class="ov-dot" style="background:var(--lvl1)"></div>
+        <div class="overview-card" onclick="showPanel('p10',null)"><div class="ov-num">10</div><div class="ov-title">Frameworks Web</div><div class="ov-levels"><div class="ov-dot" style="background:var(--lvl1)"></div><div class="ov-dot" style="background:var(--lvl2)"></div><div class="ov-dot" style="background:var(--lvl3)"></div><div class="ov-dot" style="background:var(--lvl4)"></div><div class="ov-dot" style="background:var(--lvl5)"></div></div></div><div class="ov-dot" style="background:var(--lvl2)"></div><div class="ov-dot" style="background:var(--lvl3)"></div><div class="ov-dot" style="background:var(--lvl4)"></div><div class="ov-dot" style="background:var(--lvl5)"></div></div></div>
+        <div class="overview-card" onclick="showPanel('p11',null)"><div class="ov-num">11</div><div class="ov-title">DevOps / CI-CD</div><div class="ov-levels"><div class="ov-dot" style="background:var(--lvl1)"></div>
+        <div class="overview-card" onclick="showPanel('p12',null)"><div class="ov-num">12</div><div class="ov-title">Cloud / Infraestrutura</div><div class="ov-levels"><div class="ov-dot" style="background:var(--lvl1)"></div><div class="ov-dot" style="background:var(--lvl2)"></div><div class="ov-dot" style="background:var(--lvl3)"></div><div class="ov-dot" style="background:var(--lvl4)"></div><div class="ov-dot" style="background:var(--lvl5)"></div></div></div><div class="ov-dot" style="background:var(--lvl2)"></div><div class="ov-dot" style="background:var(--lvl3)"></div><div class="ov-dot" style="background:var(--lvl4)"></div><div class="ov-dot" style="background:var(--lvl5)"></div></div></div>
         <div class="overview-card" onclick="showPanel('p13',null)"><div class="ov-num">13</div><div class="ov-title">Performance</div><div class="ov-levels"><div class="ov-dot" style="background:var(--lvl1)"></div><div class="ov-dot" style="background:var(--lvl2)"></div><div class="ov-dot" style="background:var(--lvl3)"></div><div class="ov-dot" style="background:var(--lvl4)"></div><div class="ov-dot" style="background:var(--lvl5)"></div></div></div>
         <div class="overview-card" onclick="showPanel('p14',null)"><div class="ov-num">14</div><div class="ov-title">Observabilidade</div><div class="ov-levels"><div class="ov-dot" style="background:var(--lvl1)"></div><div class="ov-dot" style="background:var(--lvl2)"></div><div class="ov-dot" style="background:var(--lvl3)"></div><div class="ov-dot" style="background:var(--lvl4)"></div><div class="ov-dot" style="background:var(--lvl5)"></div></div></div>
         <div class="overview-card" onclick="showPanel('p15',null)"><div class="ov-num">15</div><div class="ov-title">Segurança</div><div class="ov-levels"><div class="ov-dot" style="background:var(--lvl1)"></div><div class="ov-dot" style="background:var(--lvl2)"></div><div class="ov-dot" style="background:var(--lvl3)"></div><div class="ov-dot" style="background:var(--lvl4)"></div><div class="ov-dot" style="background:var(--lvl5)"></div></div></div>
@@ -361,7 +366,7 @@ public class LruCache&lt;TKey, TValue&gt;
 
     <!-- ====== P3: OOP ====== -->
     <div class="competency-panel" id="p3">
-      <div class="panel-header"><div class="panel-num">03</div><div><div class="panel-title">OOP / Modelagem</div><div class="panel-tags"><span class="tag">encapsulamento</span><span class="tag">herança</span><span class="tag">polimorfismo</span><span class="tag">DDD</span></div></div></div>
+      <div class="panel-header"><div class="panel-num">03</div><div><div class="panel-title">Orientação a Objetos / Modelagem</div><div class="panel-tags"><span class="tag">encapsulamento</span><span class="tag">herança</span><span class="tag">polimorfismo</span><span class="tag">DDD</span></div></div></div>
       <div class="levels-grid">
         <div class="level-card" onclick="toggleCard(this)"><div class="level-header"><span class="level-badge l1">Iniciante</span><span class="level-desc">Classe anêmica — apenas dados, sem comportamento</span><span class="level-chevron">▼</span></div><div class="level-body"><div class="example-label">exemplo de código</div><div class="code-block"><div class="code-lang">C#</div><pre><code class="language-csharp">// Modelo anêmico — anti-pattern clássico
 public class Pedido
@@ -624,7 +629,7 @@ public async Task ProcessarPedido(int pedidoId, string tipoDesconto)
     pedido.Total -= pedido.Total * desconto;
     pedido.Status = "Processado";
     var smtp = new SmtpClient("mail.server.com");
-    smtp.Send(new MailMessage("no-reply@co.com", pedido.Email, "Pedido processado", $"Total: {pedido.Total}"));
+    smtp.Send(new MailMessage("<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cca2a3e1bea9bca0b58cafa3e2afa3a1">[email&#160;protected]</a>", pedido.Email, "Pedido processado", $"Total: {pedido.Total}"));
     conn.Execute("UPDATE Pedidos SET Total=@t,Status=@s WHERE Id=@id", new { t=pedido.Total, s=pedido.Status, id=pedidoId });
 }
 // Banco + regra de negócio + email no mesmo método</code></pre></div><div class="observation"><strong>Problema:</strong> Impossível testar, impossível trocar o banco ou provedor de email. Acoplamento total.</div></div></div>
@@ -991,6 +996,121 @@ function ListaPedidos() {
       </div>
     </div>
 
+    <!-- ====== P10: Frameworks Web ====== -->
+    <div class="competency-panel" id="p10">
+      <div class="panel-header"><div class="panel-num">10</div><div><div class="panel-title">Frameworks Web</div><div class="panel-tags"><span class="tag">React</span><span class="tag">Angular</span><span class="tag">Vue</span><span class="tag">Blazor</span><span class="tag">Next.js</span></div></div></div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)"><div class="level-header"><span class="level-badge l1">Iniciante</span><span class="level-desc">Segue tutoriais, não entende o que o framework faz por baixo</span><span class="level-chevron">▼</span></div><div class="level-body"><div class="example-label">exemplo de código</div><div class="code-block"><div class="code-lang">JS</div><pre><code class="language-javascript">// Copia exemplo do tutorial sem entender o ciclo de vida
+function App() {
+  let contador = 0; // variável comum — não re-renderiza!
+
+  function incrementar() {
+    contador++; // muda o valor mas React não sabe disso
+    console.log(contador); // mostra o valor certo no console
+    // mas a tela nunca atualiza
+  }
+
+  return &lt;button onClick={incrementar}&gt;{contador}&lt;/button&gt;;
+}
+// Não entende por que a tela não atualiza</code></pre></div><div class="observation"><strong>Confusão clássica:</strong> React só re-renderiza quando o <em>estado</em> muda via useState. Variável comum é invisível para o framework.</div></div></div>
+
+        <div class="level-card" onclick="toggleCard(this)"><div class="level-header"><span class="level-badge l2">Básico</span><span class="level-desc">Usa useState e props corretamente, monta telas simples</span><span class="level-chevron">▼</span></div><div class="level-body"><div class="example-label">exemplo de código</div><div class="code-block"><div class="code-lang">JS</div><pre><code class="language-javascript">// useState correto — re-renderiza quando muda
+import { useState } from 'react';
+
+function Contador() {
+  const [valor, setValor] = useState(0);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Valor: {valor}&lt;/p&gt;
+      &lt;button onClick={() =&gt; setValor(valor + 1)}&gt;+&lt;/button&gt;
+      &lt;button onClick={() =&gt; setValor(valor - 1)}&gt;-&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+// Passa dados via props para componentes filhos
+// Mas ainda não sabe quando extrair um componente</code></pre></div><div class="observation"><strong>Sinal:</strong> Entende o básico de estado e props, mas cria componentes grandes demais e não pensa em reutilização.</div></div></div>
+
+        <div class="level-card" onclick="toggleCard(this)"><div class="level-header"><span class="level-badge l3">Intermediário</span><span class="level-desc">Componentiza corretamente, useEffect com dependências certas, formulários</span><span class="level-chevron">▼</span></div><div class="level-body"><div class="example-label">exemplo de código</div><div class="code-block"><div class="code-lang">JS</div><pre><code class="language-javascript">// Componente reutilizável com tipagem e responsabilidade única
+function PedidoCard({ pedido, onFechar }) {
+  return (
+    &lt;div className="card"&gt;
+      &lt;h3&gt;Pedido #{pedido.id}&lt;/h3&gt;
+      &lt;p&gt;Total: {pedido.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}&lt;/p&gt;
+      &lt;button onClick={() =&gt; onFechar(pedido.id)}&gt;Fechar&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// useEffect com dependência correta
+useEffect(() =&gt; {
+  fetchPedidos(filtro); // só re-executa quando filtro muda
+}, [filtro]); // array de dependências correto
+
+// Vue equivalente com Composition API
+const { data: pedidos, loading } = useFetch('/api/pedidos');</code></pre></div><div class="observation"><strong>Marco:</strong> Sabe decompor UI em componentes pequenos e reutilizáveis. Entende quando useEffect deve rodar e não deixa o array de dependências vazio por acidente.</div></div></div>
+
+        <div class="level-card" onclick="toggleCard(this)"><div class="level-header"><span class="level-badge l4">Avançado</span><span class="level-desc">Custom hooks, performance (memo, lazy), roteamento, state management</span><span class="level-chevron">▼</span></div><div class="level-body"><div class="example-label">exemplo de código</div><div class="code-block"><div class="code-lang">JS</div><pre><code class="language-javascript">// Custom hook — lógica reutilizável extraída do componente
+function usePedidos(filtro) {
+  const [pedidos, setPedidos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState(null);
+
+  useEffect(() =&gt; {
+    const controller = new AbortController();
+    setLoading(true);
+    fetch(`/api/pedidos?status=${filtro}`, { signal: controller.signal })
+      .then(r =&gt; r.json())
+      .then(setPedidos)
+      .catch(e =&gt; { if (e.name !== 'AbortError') setErro(e.message); })
+      .finally(() =&gt; setLoading(false));
+    return () =&gt; controller.abort(); // cleanup — cancela se componente desmonta
+  }, [filtro]);
+
+  return { pedidos, loading, erro };
+}
+
+// useMemo para evitar recálculo caro a cada render
+const totalGeral = useMemo(
+  () =&gt; pedidos.reduce((acc, p) =&gt; acc + p.total, 0),
+  [pedidos] // só recalcula quando pedidos mudar
+);
+
+// React.lazy para code splitting — não carrega o bundle inicial
+const Relatorio = React.lazy(() =&gt; import('./Relatorio'));</code></pre></div><div class="observation"><strong>Marco:</strong> Custom hooks separam lógica de UI — testáveis e reutilizáveis. AbortController evita setState em componente desmontado. useMemo evita processamento desnecessário.</div></div></div>
+
+        <div class="level-card" onclick="toggleCard(this)"><div class="level-header"><span class="level-badge l5">Especialista</span><span class="level-desc">Arquitetura frontend — SSR/SSG, micro-frontends, escolhe o framework certo</span><span class="level-chevron">▼</span></div><div class="level-body"><div class="example-label">exemplo de decisão arquitetural</div><div class="code-block"><div class="code-lang">TEXTO</div><pre><code>Especialista decide o framework pela natureza do produto:
+
+React (Next.js)
+→ Produto com time grande, ecossistema maduro
+→ SSR para SEO (e-commerce, blogs, landing pages)
+→ App com lógica complexa de estado
+
+Vue (Nuxt)
+→ Times menores, curva de aprendizado menor
+→ Projetos onde produtividade inicial importa mais
+→ Boa opção para migrar apps jQuery legados
+
+Angular
+→ Enterprise, time grande, estrutura rígida necessária
+→ Projetos onde convenção supera flexibilidade
+
+Blazor (.NET)
+→ Time C# sem expertise em JS
+→ Apps internos / intranet sem requisito de SEO
+
+Next.js App Router (Server Components):
+// Componente roda no servidor — sem JS no cliente
+async function ListaPedidos() {
+  const pedidos = await db.pedidos.findMany(); // acesso direto ao banco!
+  return &lt;ul&gt;{pedidos.map(p =&gt; &lt;li key={p.id}&gt;{p.id}&lt;/li&gt;)}&lt;/ul&gt;;
+}
+// Zero bundle size para esse componente</code></pre></div><div class="observation"><strong>Especialista:</strong> Não tem framework favorito — tem critérios. Decide entre CSR, SSR, SSG e ISR baseado em requisitos reais de SEO, performance e tamanho do time.</div></div></div>
+
+      </div>
+    </div>
+
     <!-- ====== P11: DevOps ====== -->
     <div class="competency-panel" id="p11">
       <div class="panel-header"><div class="panel-num">11</div><div><div class="panel-title">DevOps / CI-CD</div><div class="panel-tags"><span class="tag">GitHub Actions</span><span class="tag">Docker</span><span class="tag">Kubernetes</span><span class="tag">pipelines</span></div></div></div>
@@ -1085,6 +1205,127 @@ spec:
             initialDelaySeconds: 10
 # Se métricas OK → promove para 100%
 # Se métricas ruins → rollback automático</code></pre></div><div class="observation"><strong>Especialista:</strong> Define estratégia DevOps do time. Implementa GitOps (ArgoCD/Flux), IaC com Terraform, e observability integrada ao pipeline (falha se p99 &gt; threshold).</div></div></div>
+      </div>
+    </div>
+
+    <!-- ====== P12: Cloud / Infraestrutura ====== -->
+    <div class="competency-panel" id="p12">
+      <div class="panel-header"><div class="panel-num">12</div><div><div class="panel-title">Cloud / Infraestrutura</div><div class="panel-tags"><span class="tag">Azure</span><span class="tag">AWS</span><span class="tag">IaC</span><span class="tag">Terraform</span><span class="tag">Kubernetes</span></div></div></div>
+      <div class="levels-grid">
+
+        <div class="level-card" onclick="toggleCard(this)"><div class="level-header"><span class="level-badge l1">Iniciante</span><span class="level-desc">Usa cloud como "servidor remoto" — deploy manual pelo portal</span><span class="level-chevron">▼</span></div><div class="level-body"><div class="example-label">exemplo de fluxo</div><div class="code-block"><div class="code-lang">TEXTO</div><pre><code>Fluxo típico do iniciante em cloud:
+
+1. Acessa o portal Azure/AWS pelo browser
+2. Clica em "Criar recurso" manualmente
+3. Configura tudo via interface gráfica
+4. Faz deploy copiando arquivos pelo portal
+
+Problemas:
+→ Infraestrutura não está documentada em código
+→ Ambiente de staging é diferente do de produção
+→ Ninguém sabe o que foi configurado
+→ Se apagar o recurso, ninguém sabe recriá-lo exatamente
+→ Não tem ideia de custo — surpresa na fatura</code></pre></div><div class="observation"><strong>Risco:</strong> "ClickOps" não é reproduzível. Se der algo errado ou precisar recriar o ambiente, depende de memória ou sorte.</div></div></div>
+
+        <div class="level-card" onclick="toggleCard(this)"><div class="level-header"><span class="level-badge l2">Básico</span><span class="level-desc">Cria recursos básicos via CLI, entende regiões e grupos de recursos</span><span class="level-chevron">▼</span></div><div class="level-body"><div class="example-label">exemplo de código</div><div class="code-block"><div class="code-lang">TEXTO</div><pre><code># Cria recursos via CLI — já é reproduzível
+az group create --name rg-minhaapi --location brazilsouth
+
+az appservice plan create \
+  --name plan-minhaapi \
+  --resource-group rg-minhaapi \
+  --sku B1
+
+az webapp create \
+  --name minhaapi-prod \
+  --resource-group rg-minhaapi \
+  --plan plan-minhaapi \
+  --runtime "DOTNETCORE:9.0"
+
+# Entende a estrutura básica: Subscription → Resource Group → Recursos
+# Mas ainda não versiona isso — está no histórico do terminal</code></pre></div><div class="observation"><strong>Sinal:</strong> CLI é melhor que portal mas ainda não é versionado. Se o comando se perder, o ambiente também se perde.</div></div></div>
+
+        <div class="level-card" onclick="toggleCard(this)"><div class="level-header"><span class="level-badge l3">Intermediário</span><span class="level-desc">IaC com Terraform ou Bicep — infraestrutura versionada como código</span><span class="level-chevron">▼</span></div><div class="level-body"><div class="example-label">exemplo — Terraform</div><div class="code-block"><div class="code-lang">TEXTO</div><pre><code># main.tf — infraestrutura declarativa e versionável
+provider "azurerm" {
+  features {}
+}
+
+resource "azurerm_resource_group" "rg" {
+  name     = "rg-${var.ambiente}"
+  location = "Brazil South"
+  tags = {
+    ambiente = var.ambiente
+    projeto  = "minha-api"
+  }
+}
+
+resource "azurerm_service_plan" "plan" {
+  name                = "plan-${var.ambiente}"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  os_type             = "Linux"
+  sku_name            = var.ambiente == "prod" ? "P1v3" : "B1"
+}
+
+# terraform plan  → mostra o que vai mudar ANTES de aplicar
+# terraform apply → aplica as mudanças
+# terraform destroy → apaga tudo de forma controlada
+# Estado versionado no git — qualquer um do time pode recriar</code></pre></div><div class="observation"><strong>Marco:</strong> IaC torna ambientes reproduzíveis. <code>terraform plan</code> antes de aplicar é equivalente a um code review da infraestrutura.</div></div></div>
+
+        <div class="level-card" onclick="toggleCard(this)"><div class="level-header"><span class="level-badge l4">Avançado</span><span class="level-desc">Módulos reutilizáveis, managed identities, cost optimization</span><span class="level-chevron">▼</span></div><div class="level-body"><div class="example-label">exemplo — Terraform módulo + Managed Identity</div><div class="code-block"><div class="code-lang">TEXTO</div><pre><code># Módulo reutilizável — evita duplicar config entre projetos
+module "webapp" {
+  source      = "./modules/webapp"
+  nome        = "minha-api"
+  ambiente    = var.ambiente
+  sku         = var.ambiente == "prod" ? "P2v3" : "B1"
+  app_settings = {
+    "ASPNETCORE_ENVIRONMENT" = var.ambiente
+    "KeyVaultName"           = module.keyvault.nome
+  }
+}
+
+# Managed Identity — sem secrets nas variáveis de ambiente
+resource "azurerm_user_assigned_identity" "api_identity" {
+  name                = "id-minha-api"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+}
+# App acessa Key Vault, Storage e Service Bus sem senha alguma
+# A identidade é autenticada pelo Azure AD automaticamente
+
+# Auto-scaling por CPU/memória
+resource "azurerm_monitor_autoscale_setting" "scale" {
+  profile {
+    capacity { minimum = 2; default = 2; maximum = 10 }
+    rule {
+      metric_trigger { metric_name = "CpuPercentage"; threshold = 70 }
+      scale_action   { direction = "Increase"; value = 1 }
+    }
+  }
+}</code></pre></div><div class="observation"><strong>Marco:</strong> Managed Identity elimina secrets na aplicação. Módulos reutilizáveis garantem consistência entre projetos. Auto-scaling evita over-provisioning.</div></div></div>
+
+        <div class="level-card" onclick="toggleCard(this)"><div class="level-header"><span class="level-badge l5">Especialista</span><span class="level-desc">Arquitetura cloud — multi-region, FinOps, Well-Architected Framework</span><span class="level-chevron">▼</span></div><div class="level-body"><div class="example-label">exemplo de decisão arquitetural</div><div class="code-block"><div class="code-lang">TEXTO</div><pre><code>Especialista toma decisões com trade-offs explícitos:
+
+RESILIÊNCIA
+→ Active-Active multi-region: máxima disponibilidade, custo 3x
+→ Active-Passive: RTO ~5min, custo 1.5x
+→ Backup + restore: custo mínimo, RTO horas
+Decisão baseada no SLA do produto, não no padrão mais impressionante.
+
+CUSTO (FinOps)
+→ Reserved Instances para workloads estáveis: até 70% economia
+→ Spot/Preemptible para batch/workers: até 90% economia
+→ Right-sizing com Azure Advisor/AWS Compute Optimizer
+→ Tagging obrigatório para chargeback por equipe/produto
+
+SEGURANÇA (Well-Architected)
+→ Zero Trust: nenhum recurso acessa outro sem identidade explícita
+→ Private Endpoints: banco e storage inacessíveis pela internet
+→ Defender for Cloud como postura de segurança contínua
+
+OBSERVABILIDADE
+→ Custo de logs em cloud pode ser maior que o da aplicação
+→ Sampling estratégico: 100% de erros, 1% de sucesso em alto volume</code></pre></div><div class="observation"><strong>Especialista:</strong> Define a estratégia cloud do produto alinhada ao Well-Architected Framework (Confiabilidade, Segurança, Eficiência, Excelência Operacional, Custo). Conduz reviews de arquitetura com trade-offs documentados.</div></div></div>
+
       </div>
     </div>
 
@@ -1556,7 +1797,7 @@ Há uma razão específica para bloquear a thread aqui?</code></pre></div><div c
   </div><!-- /content -->
 </div><!-- /main -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 hljs.highlightAll();
 
 function toggleCard(card) {
