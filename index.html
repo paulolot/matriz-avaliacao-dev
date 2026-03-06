@@ -1336,7 +1336,7 @@ public async Task ProcessarPedido(int pedidoId, string tipoDesconto)
 
     // enviar email inline...
     var smtp = new SmtpClient("mail.server.com");
-    smtp.Send(new MailMessage("<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="82ecedaff0e7f2eefbc2e1edace1edef">[email&#160;protected]</a>", pedido.Email,
+    smtp.Send(new MailMessage("no-reply@co.com", pedido.Email,
         "Pedido processado", $"Total: {pedido.Total}"));
 
     conn.Execute("UPDATE Pedidos SET Total=@t, Status=@s WHERE Id=@id",
@@ -2357,7 +2357,7 @@ Total: 2 blockers, 1 importante, 1 sugestão, 1 pergunta</code></pre></div>
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 hljs.highlightAll();
 
 function toggleCard(card) {
@@ -2396,4 +2396,13 @@ function showPanel(panelId, navItem) {
     });
   }
 
-  // Re-h
+  // Re-highlight code in newly visible panel
+  panel?.querySelectorAll('pre code:not(.hljs)').forEach(el => hljs.highlightElement(el));
+}
+
+function filterLevel(level, el) {
+  el.classList.toggle('active');
+}
+</script>
+</body>
+</html>
